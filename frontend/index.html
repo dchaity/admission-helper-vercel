@@ -1,0 +1,1781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Admission Helper - Bangladesh</title>
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ========== COMPLETE CSS (same as original) ========== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-primary: #050816; --bg-secondary: #0a0c1a; --bg-card: #0f111f; --border: #1e1e30;
+            --primary: #4f46e5; --primary-light: #6366f1; --secondary: #8b5cf6;
+            --gradient: linear-gradient(135deg, #4f46e5, #8b5cf6);
+            --gradient-hover: linear-gradient(135deg, #6366f1, #a78bfa);
+            --text: #ffffff; --text-secondary: #a0a0b0; --text-muted: #6b7280;
+            --success: #10b981; --warning: #f59e0b; --danger: #ef4444; --info: #3b82f6;
+            --header-bg: rgba(5,8,22,0.8); --shadow: 0 20px 25px -5px rgba(0,0,0,0.5); --input-bg: #0a0c1a;
+        }
+        body.light-mode {
+            --bg-primary: #f9fafb; --bg-secondary: #f3f4f6; --bg-card: #ffffff; --border: #e5e7eb;
+            --text: #111827; --text-secondary: #4b5563; --text-muted: #6b7280;
+            --header-bg: rgba(255,255,255,0.8); --shadow: 0 20px 25px -5px rgba(0,0,0,0.1); --input-bg: #ffffff;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-primary); color: var(--text); line-height: 1.6; transition: all 0.3s; min-height: 100vh; }
+        .gradient-bg { position: fixed; top:0; left:0; width:100%; height:100%; z-index:-1; opacity:0.1; background: radial-gradient(circle at 20% 50%, rgba(79,70,229,0.3) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(139,92,246,0.3) 0%, transparent 50%); animation: gradientShift 20s ease infinite; }
+        @keyframes gradientShift { 0%,100%{transform:scale(1);opacity:0.1} 50%{transform:scale(1.2);opacity:0.15} }
+        .container { width:100%; max-width:1280px; margin:0 auto; padding:0 2rem; }
+        /* Header */
+        header { position:sticky; top:0; z-index:1000; background-color:var(--header-bg); backdrop-filter:blur(10px); border-bottom:1px solid var(--border); }
+        .header-container { display:flex; justify-content:space-between; align-items:center; padding:1rem 2rem; max-width:1280px; margin:0 auto; }
+        .logo { font-size:1.5rem; font-weight:700; display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--text); cursor:pointer; }
+        .logo i { background:var(--gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; font-size:2rem; }
+        .nav-links { display:flex; gap:2rem; list-style:none; }
+        .nav-link { color:var(--text-secondary); text-decoration:none; font-weight:500; font-size:0.95rem; padding:0.5rem 0; position:relative; cursor:pointer; }
+        .nav-link:hover, .nav-link.active { color:var(--text); }
+        .nav-link::after { content:''; position:absolute; bottom:0; left:0; width:0; height:2px; background:var(--gradient); transition:width 0.3s; }
+        .nav-link:hover::after, .nav-link.active::after { width:100%; }
+        /* Profile Dropdown */
+        .user-profile { position:relative; }
+        .profile-btn { background:none; border:1px solid var(--border); color:var(--text); font-size:1rem; cursor:pointer; display:flex; align-items:center; gap:8px; padding:0.6rem 1.2rem; border-radius:30px; transition:all 0.3s; }
+        .profile-btn:hover { border-color:var(--primary); }
+        .profile-dropdown { position:absolute; top:120%; right:0; background-color:var(--bg-card); border:1px solid var(--border); border-radius:12px; min-width:280px; box-shadow:var(--shadow); padding:1rem 0; display:none; flex-direction:column; z-index:1001; }
+        .profile-dropdown.show { display:flex; }
+        .profile-dropdown-item { padding:0.8rem 1.5rem; display:flex; align-items:center; gap:12px; cursor:pointer; transition:all 0.2s; color:var(--text); text-decoration:none; border:none; background:none; width:100%; text-align:left; font-size:0.95rem; }
+        .profile-dropdown-item:hover { background:rgba(79,70,229,0.1); }
+        .profile-dropdown-item i { width:20px; color:var(--primary); }
+        .profile-info { padding:0.8rem 1.5rem; border-bottom:1px solid var(--border); margin-bottom:0.5rem; }
+        .profile-name { font-weight:600; margin-bottom:0.2rem; }
+        .profile-email { font-size:0.85rem; color:var(--text-secondary); }
+        .badge { background:var(--gradient); color:white; font-size:0.7rem; padding:0.2rem 0.5rem; border-radius:30px; margin-left:auto; }
+        .mobile-toggle { display:none; background:none; border:1px solid var(--border); color:var(--text); font-size:1.2rem; padding:0.5rem 1rem; border-radius:8px; cursor:pointer; }
+        @media (max-width:768px){ .nav-links{display:none} .mobile-toggle{display:block} }
+        .main-content { min-height:calc(100vh - 160px); padding:3rem 0; }
+        .page { display:none; animation:fadeIn 0.5s; }
+        .page.active { display:block; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+        .btn { padding:0.8rem 2rem; border:none; border-radius:30px; font-family:'Inter',sans-serif; font-weight:600; font-size:1rem; cursor:pointer; transition:all 0.3s; display:inline-flex; align-items:center; justify-content:center; gap:8px; }
+        .btn-primary { background:var(--gradient); color:white; box-shadow:0 10px 20px -5px rgba(79,70,229,0.5); }
+        .btn-primary:hover { background:var(--gradient-hover); transform:translateY(-2px); box-shadow:0 15px 25px -5px rgba(79,70,229,0.6); }
+        .btn-secondary { background:var(--bg-card); border:1px solid var(--border); color:var(--text); }
+        .btn-secondary:hover { border-color:var(--primary); }
+        .btn-outline { background:transparent; border:1px solid var(--border); color:var(--text); }
+        .btn-outline:hover { border-color:var(--primary); color:var(--primary); }
+        .btn-block { width:100%; }
+        .btn-sm { padding:0.5rem 1rem; font-size:0.9rem; }
+        /* Hero Section */
+        .hero-section { min-height:80vh; display:flex; align-items:center; position:relative; margin-bottom:4rem; }
+        .hero-content { max-width:800px; }
+        .hero-badge { display:inline-block; padding:0.5rem 1rem; background:rgba(79,70,229,0.1); border:1px solid rgba(79,70,229,0.3); border-radius:30px; color:var(--primary); font-size:0.9rem; margin-bottom:1.5rem; }
+        .hero-title { font-size:4rem; font-weight:800; line-height:1.2; margin-bottom:1.5rem; }
+        .hero-title .gradient-text { background:var(--gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .hero-subtitle { font-size:1.2rem; color:var(--text-secondary); margin-bottom:2.5rem; max-width:600px; }
+        .hero-buttons { display:flex; gap:1rem; flex-wrap:wrap; }
+        .scroll-indicator { position:absolute; bottom:2rem; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:0.5rem; color:var(--text-secondary); font-size:0.9rem; animation:bounce 2s infinite; }
+        @keyframes bounce { 0%,20%,50%,80%,100%{transform:translateX(-50%) translateY(0)} 40%{transform:translateX(-50%) translateY(-10px)} 60%{transform:translateX(-50%) translateY(-5px)} }
+        /* Auth Forms */
+        .auth-container { max-width:500px; margin:2rem auto; background-color:var(--bg-card); border:1px solid var(--border); border-radius:24px; padding:3rem; box-shadow:var(--shadow); }
+        .auth-title { text-align:center; font-size:2rem; font-weight:700; margin-bottom:0.5rem; background:var(--gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .auth-subtitle { text-align:center; color:var(--text-secondary); margin-bottom:2rem; }
+        .form-group { margin-bottom:1.5rem; }
+        .form-label { display:block; font-weight:500; margin-bottom:0.5rem; color:var(--text); }
+        .form-input { width:100%; padding:1rem 1.2rem; background-color:var(--input-bg); border:1px solid var(--border); border-radius:12px; font-family:'Inter',sans-serif; font-size:1rem; color:var(--text); transition:all 0.3s; }
+        .form-input:focus { outline:none; border-color:var(--primary); box-shadow:0 0 0 3px rgba(79,70,229,0.2); }
+        .form-input::placeholder { color:var(--text-muted); }
+        .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+        .auth-link { text-align:center; margin-top:1.5rem; color:var(--text-secondary); }
+        .auth-link a { color:var(--primary); text-decoration:none; font-weight:500; cursor:pointer; }
+        .auth-link a:hover { text-decoration:underline; }
+        /* Content Pages */
+        .content-page { max-width:900px; margin:0 auto; }
+        .content-header { text-align:center; margin-bottom:3rem; }
+        .content-header h1 { font-size:3rem; font-weight:700; margin-bottom:1rem; background:var(--gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .content-header p { color:var(--text-secondary); font-size:1.2rem; }
+        .content-section { background-color:var(--bg-card); border:1px solid var(--border); border-radius:16px; padding:2rem; margin-bottom:2rem; }
+        .content-section h2 { font-size:1.8rem; margin-bottom:1.5rem; color:var(--text); }
+        .content-section h3 { font-size:1.3rem; margin:1.5rem 0 1rem; color:var(--primary); }
+        .content-section p { color:var(--text-secondary); margin-bottom:1rem; line-height:1.8; }
+        .content-section ul, .content-section ol { margin:1rem 0 1rem 2rem; color:var(--text-secondary); }
+        .content-section li { margin-bottom:0.5rem; }
+        /* University Cards */
+        .university-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(300px,1fr)); gap:2rem; margin-top:2rem; }
+        .university-card { background-color:var(--bg-card); border:1px solid var(--border); border-radius:16px; padding:1.5rem; transition:all 0.3s; }
+        .university-card:hover { transform:translateY(-5px); border-color:var(--primary); }
+        .university-badge { display:inline-block; padding:0.3rem 1rem; background:var(--primary); color:white; border-radius:30px; font-size:0.8rem; margin-bottom:1rem; }
+        .university-name { font-size:1.4rem; margin-bottom:1rem; }
+        .university-details { display:flex; flex-direction:column; gap:0.5rem; margin-bottom:1rem; color:var(--text-secondary); }
+        .university-details i { width:20px; color:var(--primary); }
+        .filter-buttons { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin:2rem 0; }
+        .filter-btn { padding:0.5rem 1.5rem; background:var(--bg-card); border:1px solid var(--border); border-radius:30px; color:var(--text); cursor:pointer; transition:all 0.3s; }
+        .filter-btn.active, .filter-btn:hover { background:var(--gradient); border-color:transparent; color:white; }
+        /* Scholarship Cards */
+        .scholarship-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(300px,1fr)); gap:2rem; margin-top:2rem; }
+        .scholarship-card { background-color:var(--bg-card); border:1px solid var(--border); border-radius:16px; padding:1.5rem; }
+        .scholarship-badge { display:inline-block; padding:0.3rem 1rem; background:var(--secondary); color:white; border-radius:30px; font-size:0.8rem; margin-bottom:1rem; }
+        .scholarship-amount { font-size:2rem; font-weight:700; color:var(--primary); margin-bottom:1rem; }
+        .scholarship-deadline { color:var(--text-secondary); margin:1rem 0; }
+        /* Dashboard */
+        .dashboard-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; flex-wrap:wrap; gap:1rem; }
+        .dashboard-title { font-size:2rem; background:var(--gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .dashboard-cards { display:grid; grid-template-columns:repeat(auto-fit, minmax(250px,1fr)); gap:2rem; margin-bottom:3rem; }
+        .dashboard-card { background-color:var(--bg-card); border:1px solid var(--border); border-radius:16px; padding:2rem; text-align:center; }
+        .dashboard-card-title { color:var(--text-secondary); margin-bottom:1rem; font-size:1.1rem; display:flex; align-items:center; justify-content:center; gap:10px; }
+        .dashboard-card-value { font-size:3rem; font-weight:700; color:var(--primary); }
+        .applications-section, .bookmarks-section { margin-top:3rem; }
+        .applications-section h3, .bookmarks-section h3 { margin-bottom:1.5rem; }
+        .table-responsive { overflow-x:auto; }
+        .applications-table { width:100%; border-collapse:collapse; background-color:var(--bg-card); border:1px solid var(--border); border-radius:12px; }
+        .applications-table th, .applications-table td { padding:1rem; text-align:left; border-bottom:1px solid var(--border); }
+        .applications-table th { background-color:var(--bg-secondary); color:var(--text); font-weight:600; }
+        .applications-table td { color:var(--text-secondary); }
+        .status-badge { display:inline-block; padding:0.3rem 1rem; border-radius:30px; font-size:0.8rem; font-weight:500; }
+        .status-badge.pending { background:#f59e0b20; color:#f59e0b; }
+        .status-badge.approved { background:#10b98120; color:#10b981; }
+        .status-badge.rejected { background:#ef444420; color:#ef4444; }
+        .progress-bar { width:100%; height:10px; background-color:var(--border); border-radius:10px; margin:1rem 0; }
+        .progress-fill { height:100%; background:var(--gradient); border-radius:10px; width:0%; }
+        .flex-grow { flex:1; }
+        /* Modal */
+        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.5); z-index:2000; justify-content:center; align-items:center; }
+        .modal.show { display:flex; }
+        .modal-content { background-color:var(--bg-card); border:1px solid var(--border); border-radius:16px; max-width:500px; width:90%; max-height:90vh; overflow-y:auto; padding:2rem; position:relative; }
+        .modal-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; }
+        .modal-title { font-size:1.5rem; }
+        .modal-close { background:none; border:none; color:var(--text); font-size:1.5rem; cursor:pointer; }
+        /* Notification */
+        .notification-container { position:fixed; top:20px; right:20px; z-index:3000; }
+        .notification { background-color:var(--bg-card); border-left:4px solid var(--primary); border-radius:8px; padding:1rem 1.5rem; margin-bottom:10px; box-shadow:var(--shadow); animation:slideIn 0.3s; }
+        @keyframes slideIn { from{transform:translateX(100%);opacity:0} to{transform:translateX(0);opacity:1} }
+        .notification.success { border-left-color:var(--success); }
+        .notification.error { border-left-color:var(--danger); }
+        .notification.warning { border-left-color:var(--warning); }
+        .notification.info { border-left-color:var(--info); }
+        /* Footer */
+        footer { background-color:var(--bg-card); border-top:1px solid var(--border); padding:4rem 0 2rem; margin-top:4rem; }
+        .footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:3rem; margin-bottom:3rem; }
+        .footer-logo { font-size:1.5rem; font-weight:700; display:flex; align-items:center; gap:10px; margin-bottom:1rem; cursor:pointer; }
+        .footer-logo i { background:var(--gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .footer-desc { color:var(--text-secondary); font-size:0.95rem; line-height:1.7; margin-bottom:1.5rem; }
+        .footer-title { font-size:1.1rem; font-weight:600; margin-bottom:1.5rem; }
+        .footer-links { list-style:none; }
+        .footer-links li { margin-bottom:0.8rem; }
+        .footer-links a { color:var(--text-secondary); text-decoration:none; transition:color 0.3s; cursor:pointer; }
+        .footer-links a:hover { color:var(--primary); }
+        .social-links { display:flex; gap:1rem; }
+        .social-link { width:40px; height:40px; border:1px solid var(--border); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--text); text-decoration:none; transition:all 0.3s; }
+        .social-link:hover { background:var(--gradient); border-color:transparent; color:white; transform:translateY(-3px); }
+        .footer-bottom { text-align:center; padding-top:2rem; border-top:1px solid var(--border); color:var(--text-secondary); }
+        @media (max-width:1024px){ .hero-title{font-size:3rem} .footer-grid{grid-template-columns:repeat(2,1fr)} }
+        @media (max-width:768px){ .hero-title{font-size:2.5rem} .hero-buttons{flex-direction:column} .btn{width:100%} .form-row{grid-template-columns:1fr} .footer-grid{grid-template-columns:1fr} }
+        @media (max-width:480px){ .container{padding:0 1rem} .hero-title{font-size:2rem} .auth-container{padding:2rem 1.5rem} }
+        .text-center { text-align:center; }
+        .mt-4 { margin-top:2rem; }
+        .mb-4 { margin-bottom:2rem; }
+        .hidden { display:none !important; }
+    </style>
+</head>
+<body>
+    <!-- Cookie Consent Banner -->
+    <div class="cookie-consent" id="cookieConsent">
+        <p>We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies.</p>
+        <div class="cookie-buttons">
+            <button class="btn btn-primary btn-sm" onclick="acceptCookies()">Accept</button>
+            <button class="btn btn-outline btn-sm" onclick="declineCookies()">Decline</button>
+        </div>
+    </div>
+
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Animated Background -->
+    <div class="gradient-bg"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo" onclick="navigateTo('home')">
+                <i class="fas fa-graduation-cap"></i>
+                <span>Admission<span style="color: var(--primary);">Helper</span></span>
+            </div>
+            
+            <ul class="nav-links">
+                <li><a class="nav-link active" onclick="navigateTo('home')">Home</a></li>
+                <li><a class="nav-link" onclick="navigateTo('universities')">Universities</a></li>
+                <li><a class="nav-link" onclick="navigateTo('scholarships')">Scholarships</a></li>
+                <li><a class="nav-link" onclick="navigateTo('about')">About</a></li>
+                <li><a class="nav-link" onclick="navigateTo('faq')">FAQ</a></li>
+                <li><a class="nav-link" onclick="navigateTo('blog')">Blog</a></li>
+                <li><a class="nav-link" onclick="navigateTo('contact')">Contact</a></li>
+            </ul>
+            
+            <div class="user-profile">
+                <button class="profile-btn" id="profileBtn">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="profileName">Guest</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <div class="profile-info">
+                        <div class="profile-name" id="dropdownName">Guest User</div>
+                        <div class="profile-email" id="dropdownEmail">guest@example.com</div>
+                    </div>
+                    <button class="profile-dropdown-item" onclick="navigateTo('dashboard')">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </button>
+                    <button class="profile-dropdown-item" onclick="navigateTo('applications')">
+                        <i class="fas fa-file-alt"></i> My Applications
+                        <span class="badge" id="applicationBadge">0</span>
+                    </button>
+                    <button class="profile-dropdown-item" onclick="navigateTo('bookmarks')">
+                        <i class="fas fa-bookmark"></i> Bookmarks
+                        <span class="badge" id="bookmarkBadge">0</span>
+                    </button>
+                    <button class="profile-dropdown-item" onclick="showProfileModal()">
+                        <i class="fas fa-user"></i> My Profile
+                    </button>
+                    <button class="profile-dropdown-item" onclick="showSettingsModal()">
+                        <i class="fas fa-cog"></i> Settings
+                    </button>
+                    <button class="profile-dropdown-item" id="darkModeToggle">
+                        <i class="fas fa-moon"></i> Dark Mode
+                    </button>
+                    <button class="profile-dropdown-item" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+
+            <button class="mobile-toggle" id="mobileToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Home Page -->
+            <div class="page active" id="homePage">
+                <div class="hero-section">
+                    <div class="hero-content">
+                        <span class="hero-badge">
+                            <i class="fas fa-rocket"></i> Bangladesh's #1 Admission Platform
+                        </span>
+                        <h1 class="hero-title">
+                            <span class="gradient-text">Smart</span> University<br>Admission Management
+                        </h1>
+                        <p class="hero-subtitle">
+                            Check eligibility, apply to universities, track applications, and compare options - 
+                            all in one place for Bangladeshi students.
+                        </p>
+                        <div class="hero-buttons">
+                            <button class="btn btn-primary" onclick="navigateTo('universities')">
+                                <i class="fas fa-university"></i> Explore Universities
+                            </button>
+                            <button class="btn btn-secondary" onclick="showLoginForm()">
+                                <i class="fas fa-sign-in-alt"></i> Student Login
+                            </button>
+                        </div>
+                    </div>
+                    <div class="scroll-indicator">
+                        <span>Scroll</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+
+                <!-- Login/Signup Forms -->
+                <div class="auth-container" id="authForms">
+                    <!-- Login Form -->
+                    <div id="loginForm">
+                        <h2 class="auth-title">Welcome Back</h2>
+                        <p class="auth-subtitle">Login to your account</p>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" id="loginEmail" class="form-input" placeholder="Enter your email">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Password</label>
+                            <div style="position: relative;">
+                                <input type="password" id="loginPassword" class="form-input" placeholder="Enter your password">
+                                <i class="fas fa-eye" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer;" onclick="togglePassword('loginPassword', this)"></i>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary btn-block" onclick="login()">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </button>
+                        <div class="auth-link">
+                            <a onclick="showForgotPassword()">Forgot Password?</a>
+                        </div>
+                        <div class="auth-link">
+                            Don't have an account? <a onclick="showSignupForm()">Sign Up</a>
+                        </div>
+                        <div class="auth-link">
+                            <a onclick="showAdminLoginForm()">Admin Login →</a>
+                        </div>
+                    </div>
+
+                    <!-- Signup Form -->
+                    <div id="signupForm" style="display: none;">
+                        <h2 class="auth-title">Create Account</h2>
+                        <p class="auth-subtitle">Join thousands of students</p>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" id="signupName" class="form-input" placeholder="Enter your full name">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" id="signupEmail" class="form-input" placeholder="Enter your email">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Phone Number</label>
+                            <input type="tel" id="signupPhone" class="form-input" placeholder="01XXXXXXXXX">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Password</label>
+                                <div style="position: relative;">
+                                    <input type="password" id="signupPassword" class="form-input" placeholder="Create password">
+                                    <i class="fas fa-eye" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer;" onclick="togglePassword('signupPassword', this)"></i>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Confirm</label>
+                                <div style="position: relative;">
+                                    <input type="password" id="confirmPassword" class="form-input" placeholder="Confirm password">
+                                    <i class="fas fa-eye" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer;" onclick="togglePassword('confirmPassword', this)"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">SSC GPA</label>
+                                <input type="number" id="sscGPA" class="form-input" step="0.01" min="0" max="5" placeholder="4.50">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">HSC GPA</label>
+                                <input type="number" id="hscGPA" class="form-input" step="0.01" min="0" max="5" placeholder="4.80">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Academic Group</label>
+                            <select id="signupGroup" class="form-input">
+                                <option value="">Select Group</option>
+                                <option value="science">Science</option>
+                                <option value="commerce">Commerce</option>
+                                <option value="arts">Arts</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary btn-block" onclick="register()">
+                            <i class="fas fa-user-plus"></i> Create Account
+                        </button>
+                        <div class="auth-link">
+                            Already have an account? <a onclick="showLoginForm()">Login</a>
+                        </div>
+                    </div>
+
+                    <!-- Forgot Password Form -->
+                    <div id="forgotPasswordForm" style="display: none;">
+                        <h2 class="auth-title">Reset Password</h2>
+                        <p class="auth-subtitle">Enter your email to receive reset link</p>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" id="resetEmail" class="form-input" placeholder="Enter your email">
+                        </div>
+                        <button class="btn btn-primary btn-block" onclick="requestPasswordReset()">
+                            <i class="fas fa-paper-plane"></i> Send Reset Link
+                        </button>
+                        <div class="auth-link">
+                            <a onclick="showLoginForm()">← Back to Login</a>
+                        </div>
+                    </div>
+
+                    <!-- Admin Login Form -->
+                    <div id="adminLoginForm" style="display: none;">
+                        <h2 class="auth-title">Admin Access</h2>
+                        <p class="auth-subtitle">Secure administrator login</p>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Admin Email</label>
+                            <input type="email" id="adminEmail" class="form-input" value="admin@test.com" placeholder="admin@test.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Admin Password</label>
+                            <div style="position: relative;">
+                                <input type="password" id="adminPassword" class="form-input" placeholder="Enter admin password">
+                                <i class="fas fa-eye" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer;" onclick="togglePassword('adminPassword', this)"></i>
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary btn-block" onclick="adminLogin()">
+                            <i class="fas fa-lock"></i> Admin Login
+                        </button>
+                        <div class="auth-link">
+                            <a onclick="showLoginForm()">← Back to User Login</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Universities Page -->
+            <div class="page" id="universitiesPage">
+                <div class="content-header">
+                    <h1>Universities in Bangladesh</h1>
+                    <p>Browse all public and private universities offering undergraduate programs</p>
+                </div>
+                
+                <div class="filter-buttons">
+                    <button class="filter-btn active" onclick="filterUniversities('all')">All</button>
+                    <button class="filter-btn" onclick="filterUniversities('public')">Public</button>
+                    <button class="filter-btn" onclick="filterUniversities('private')">Private</button>
+                </div>
+
+                <div class="university-grid" id="universitiesGrid">
+                    <!-- Universities will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Scholarships Page -->
+            <div class="page" id="scholarshipsPage">
+                <div class="content-header">
+                    <h1>Scholarships & Financial Aid</h1>
+                    <p>Find funding opportunities for your education</p>
+                </div>
+
+                <div class="scholarship-grid" id="scholarshipsGrid">
+                    <!-- Scholarships will be loaded here -->
+                </div>
+            </div>
+
+            <!-- About Page -->
+            <div class="page" id="aboutPage">
+                <div class="content-page">
+                    <div class="content-header">
+                        <h1>About Us</h1>
+                        <p>Your trusted partner in university admissions</p>
+                    </div>
+                    <div class="content-section">
+                        <h2>Our Mission</h2>
+                        <p>To simplify the university admission process for Bangladeshi students by providing a comprehensive, free platform for eligibility checking, applications, and tracking. We believe every student deserves access to quality higher education without the hassle of complex admission procedures.</p>
+                        
+                        <h2>Our Vision</h2>
+                        <p>To become Bangladesh's most trusted and comprehensive university admission platform, helping thousands of students achieve their academic dreams each year by 2030.</p>
+                        
+                        <h2>What We Offer</h2>
+                        <ul>
+                            <li>✅ Eligibility checker based on SSC/HSC GPA and academic group</li>
+                            <li>✅ Apply to multiple universities from one dashboard</li>
+                            <li>✅ Track application status in real‑time</li>
+                            <li>✅ Compare universities side by side</li>
+                            <li>✅ Bookmark favorite programs and receive deadline reminders</li>
+                            <li>✅ Scholarship finder with personalised matches</li>
+                            <li>✅ Expert guidance articles and blog posts</li>
+                            <li>✅ 24/7 support via email and phone</li>
+                        </ul>
+                        
+                        <h2>Our Team</h2>
+                        <p>We are a team of education enthusiasts, software developers, and admission experts dedicated to making higher education more accessible. With years of experience in the Bangladeshi education sector, we understand the challenges students face and have built this platform to address them. Our team is headquartered in Dhaka and works with partner universities across the country.</p>
+                        
+                        <h2>Why Choose Us</h2>
+                        <ul>
+                            <li>🎓 Comprehensive database of all public and private universities in Bangladesh</li>
+                            <li>📊 Accurate and up‑to‑date information directly from university sources</li>
+                            <li>🔒 Secure and private – your data is never shared without consent</li>
+                            <li>💬 Free student support – we're here to help</li>
+                            <li>📱 Fully responsive – works on mobile, tablet, and desktop</li>
+                            <li>💰 Always free for students – no hidden fees</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ Page -->
+            <div class="page" id="faqPage">
+                <div class="content-page">
+                    <div class="content-header">
+                        <h1>Frequently Asked Questions</h1>
+                        <p>Find answers to common questions about university admissions</p>
+                    </div>
+                    <div class="content-section">
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                <h3>How do I check my eligibility for universities?</h3>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Once you create an account and enter your SSC/HSC GPA and academic group, your dashboard will automatically show you all programs you're eligible for. You can also use the “Check Eligibility” button on the dashboard to refresh the list.</p>
+                            </div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                <h3>Can I apply to multiple universities?</h3>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Yes! You can apply to as many universities as you want. Each application is stored in your dashboard, and you can track their status separately.</p>
+                            </div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                <h3>Is there any fee to use this platform?</h3>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>No, the platform is completely free for students. We do not charge any fees for checking eligibility, comparing universities, or submitting applications through our system.</p>
+                            </div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                <h3>How do I track my application status?</h3>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Log in and go to your Dashboard → “My Applications”. You'll see the current status (pending, approved, rejected) for each application. We also send email notifications when the status changes.</p>
+                            </div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                <h3>What documents do I need to apply?</h3>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Typically you'll need:
+                                    <ul>
+                                        <li>SSC certificate and marksheet</li>
+                                        <li>HSC certificate and marksheet (or equivalent)</li>
+                                        <li>Recent passport‑size photograph</li>
+                                        <li>National ID or birth certificate</li>
+                                        <li>Application fee payment receipt (if required by the university)</li>
+                                    </ul>
+                                    Some universities may ask for additional documents – check the specific program details.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                <h3>How do I reset my password?</h3>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Click “Forgot Password?” on the login page, enter your email, and we'll send you a password reset link. The link expires in 1 hour for security.</p>
+                            </div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                <h3>Is my personal information secure?</h3>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Absolutely. We use industry‑standard encryption to protect your data. Your information is never shared with third parties without your explicit consent. Read our <a onclick="navigateTo('privacy')">Privacy Policy</a> for more details.</p>
+                            </div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question" onclick="toggleFaq(this)">
+                                <h3>How can I contact support?</h3>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>You can reach us via email at <strong>support@admissionhelper.bd</strong>, call us at <strong>+880 1234-567890</strong> (Sun–Thu, 9 AM – 6 PM), or use the <a onclick="navigateTo('contact')">Contact Form</a>. We typically reply within 24 hours.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Blog Page -->
+            <div class="page" id="blogPage">
+                <div class="content-page">
+                    <div class="content-header">
+                        <h1>Admission Blog</h1>
+                        <p>Tips, guides, and updates for university admissions</p>
+                    </div>
+
+                    <div class="blog-grid">
+                        <div class="blog-card">
+                            <div class="blog-image"><i class="fas fa-calendar-alt"></i></div>
+                            <div class="blog-content">
+                                <h3>2025 Admission Deadlines Announced</h3>
+                                <div class="blog-meta">By Admin • March 15, 2025 • 5 min read</div>
+                                <p>All major public and private universities have released their admission schedules for the 2025‑2026 academic year. Check out the complete list with important dates.</p>
+                                <button class="btn btn-outline btn-sm mt-4" onclick="viewBlogPost(1)">Read More</button>
+                            </div>
+                        </div>
+                        <div class="blog-card">
+                            <div class="blog-image"><i class="fas fa-graduation-cap"></i></div>
+                            <div class="blog-content">
+                                <h3>How to Prepare for Admission Tests</h3>
+                                <div class="blog-meta">By Advisor • March 10, 2025 • 8 min read</div>
+                                <p>Expert tips on how to prepare for university admission tests, including study plans, recommended books, and online resources.</p>
+                                <button class="btn btn-outline btn-sm mt-4" onclick="viewBlogPost(2)">Read More</button>
+                            </div>
+                        </div>
+                        <div class="blog-card">
+                            <div class="blog-image"><i class="fas fa-trophy"></i></div>
+                            <div class="blog-content">
+                                <h3>Top 10 Universities in Bangladesh 2025</h3>
+                                <div class="blog-meta">By Research Team • March 5, 2025 • 6 min read</div>
+                                <p>Based on academic performance, facilities, faculty, and student satisfaction, here are the top universities this year.</p>
+                                <button class="btn btn-outline btn-sm mt-4" onclick="viewBlogPost(3)">Read More</button>
+                            </div>
+                        </div>
+                        <div class="blog-card">
+                            <div class="blog-image"><i class="fas fa-dollar-sign"></i></div>
+                            <div class="blog-content">
+                                <h3>Complete Guide to Scholarships</h3>
+                                <div class="blog-meta">By Financial Aid • March 1, 2025 • 10 min read</div>
+                                <p>Everything you need to know about scholarships in Bangladesh – how to find them, eligibility criteria, and application tips.</p>
+                                <button class="btn btn-outline btn-sm mt-4" onclick="viewBlogPost(4)">Read More</button>
+                            </div>
+                        </div>
+                        <div class="blog-card">
+                            <div class="blog-image"><i class="fas fa-file-alt"></i></div>
+                            <div class="blog-content">
+                                <h3>Application Essay Writing Tips</h3>
+                                <div class="blog-meta">By Writing Expert • February 25, 2025 • 7 min read</div>
+                                <p>Learn how to write compelling application essays that stand out from the crowd. Includes do's and don'ts.</p>
+                                <button class="btn btn-outline btn-sm mt-4" onclick="viewBlogPost(5)">Read More</button>
+                            </div>
+                        </div>
+                        <div class="blog-card">
+                            <div class="blog-image"><i class="fas fa-chart-line"></i></div>
+                            <div class="blog-content">
+                                <h3>Understanding Admission Test Scores</h3>
+                                <div class="blog-meta">By Test Prep • February 20, 2025 • 5 min read</div>
+                                <p>A breakdown of how admission tests are scored and what scores you need for different universities.</p>
+                                <button class="btn btn-outline btn-sm mt-4" onclick="viewBlogPost(6)">Read More</button>
+                            </div>
+                        </div>
+                        <div class="blog-card">
+                            <div class="blog-image"><i class="fas fa-university"></i></div>
+                            <div class="blog-content">
+                                <h3>Public vs. Private Universities: Pros & Cons</h3>
+                                <div class="blog-meta">By Education Desk • February 15, 2025 • 7 min read</div>
+                                <p>We compare public and private universities in Bangladesh – fees, quality, facilities, and placement – to help you decide.</p>
+                                <button class="btn btn-outline btn-sm mt-4" onclick="viewBlogPost(7)">Read More</button>
+                            </div>
+                        </div>
+                        <div class="blog-card">
+                            <div class="blog-image"><i class="fas fa-clock"></i></div>
+                            <div class="blog-content">
+                                <h3>Last‑Minute Preparation Tips</h3>
+                                <div class="blog-meta">By Mentor • February 10, 2025 • 4 min read</div>
+                                <p>What to do in the final week before your admission test – revision strategies, health tips, and what to bring.</p>
+                                <button class="btn btn-outline btn-sm mt-4" onclick="viewBlogPost(8)">Read More</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Page -->
+            <div class="page" id="contactPage">
+                <div class="content-page">
+                    <div class="content-header">
+                        <h1>Contact Us</h1>
+                        <p>We're here to help with any questions</p>
+                    </div>
+
+                    <div class="contact-grid">
+                        <div class="contact-card">
+                            <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                            <h3>Email</h3>
+                            <p>support@admissionhelper.bd</p>
+                            <p>info@admissionhelper.bd</p>
+                            <p>We reply within 24 hours</p>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-icon"><i class="fas fa-phone"></i></div>
+                            <h3>Phone</h3>
+                            <p>+880 1234-567890</p>
+                            <p>+880 1987-654321</p>
+                            <p>Sun–Thu, 9 AM – 6 PM</p>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                            <h3>Office</h3>
+                            <p>House 12, Road 5, Dhanmondi</p>
+                            <p>Dhaka – 1205, Bangladesh</p>
+                        </div>
+                    </div>
+
+                    <div class="content-section">
+                        <h2>Send Us a Message</h2>
+                        <form onsubmit="event.preventDefault(); sendContactMessage()">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Your Name</label>
+                                    <input type="text" id="contactName" class="form-input" placeholder="Enter your name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Your Email</label>
+                                    <input type="email" id="contactEmail" class="form-input" placeholder="Enter your email" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Subject</label>
+                                <input type="text" id="contactSubject" class="form-input" placeholder="What is this about?" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Message</label>
+                                <textarea id="contactMessage" class="form-input" rows="5" placeholder="Your message..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Support Page -->
+            <div class="page" id="supportPage">
+                <div class="content-page">
+                    <div class="content-header">
+                        <h1>Support Center</h1>
+                        <p>Get help with any issues</p>
+                    </div>
+
+                    <div class="content-section">
+                        <h2>Common Issues & Solutions</h2>
+
+                        <h3>🔐 Login Problems</h3>
+                        <p>If you're having trouble logging in:</p>
+                        <ul>
+                            <li>Make sure your email and password are correct.</li>
+                            <li>Check if your email is verified (look for a verification email).</li>
+                            <li>Use the “Forgot Password” option to reset your password.</li>
+                            <li>Clear your browser cache and cookies, then try again.</li>
+                        </ul>
+
+                        <h3>📝 Application Issues</h3>
+                        <p>If you can't submit an application:</p>
+                        <ul>
+                            <li>Ensure you've filled all required fields in your profile (SSC/HSC GPA, group).</li>
+                            <li>Check if the application deadline hasn't passed.</li>
+                            <li>Verify your GPA meets the minimum requirements for that university.</li>
+                            <li>Try using a different browser (Chrome, Firefox, Edge).</li>
+                        </ul>
+
+                        <h3>💳 Payment Problems</h3>
+                        <p>For payment‑related issues (if applicable):</p>
+                        <ul>
+                            <li>Ensure you have sufficient balance in your payment method.</li>
+                            <li>Check that you entered the correct transaction ID or mobile banking number.</li>
+                            <li>Wait 10 minutes and refresh the page – sometimes payments take time to confirm.</li>
+                            <li>Contact your payment service provider (e.g., bKash, Nagad) if the money was deducted but the application isn't showing.</li>
+                        </ul>
+
+                        <h3>📧 Still Need Help?</h3>
+                        <p>If you're still experiencing issues, please contact our support team:</p>
+                        <ul>
+                            <li>📧 Email: <strong>support@admissionhelper.bd</strong> – we reply within 24 hours.</li>
+                            <li>📞 Phone: <strong>+880 1234-567890</strong> (Sunday–Thursday, 9 AM – 6 PM).</li>
+                            <li>💬 Live chat: Available on this website during business hours.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Privacy Policy Page -->
+            <div class="page" id="privacyPage">
+                <div class="content-page">
+                    <div class="content-header">
+                        <h1>Privacy Policy</h1>
+                        <p>Last updated: March 1, 2025</p>
+                    </div>
+                    <div class="content-section">
+                        <h2>1. Introduction</h2>
+                        <p>Welcome to University Admission Helper (“we”, “our”, “us”). We are committed to protecting your personal information and your right to privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our platform.</p>
+
+                        <h2>2. Information We Collect</h2>
+                        <p>We collect personal information that you voluntarily provide to us when you register, express interest in obtaining information, or contact us. This may include:</p>
+                        <ul>
+                            <li>Name, email address, phone number</li>
+                            <li>SSC/HSC GPA, academic group, institution</li>
+                            <li>Profile picture, bio, address (if provided)</li>
+                            <li>University choices, program preferences, application data</li>
+                            <li>Transaction IDs and payment details (if applicable)</li>
+                        </ul>
+
+                        <h2>3. How We Use Your Information</h2>
+                        <p>We use your information to:</p>
+                        <ul>
+                            <li>Create and manage your account</li>
+                            <li>Process your university applications and scholarship requests</li>
+                            <li>Send you status updates, deadline reminders, and notifications</li>
+                            <li>Improve our platform and services</li>
+                            <li>Respond to your inquiries and support requests</li>
+                            <li>Comply with legal obligations</li>
+                        </ul>
+
+                        <h2>4. Sharing Your Information</h2>
+                        <p>We may share your information with:</p>
+                        <ul>
+                            <li>Universities you apply to (for application processing)</li>
+                            <li>Payment processors (for fee transactions)</li>
+                            <li>Service providers who assist in operating our platform</li>
+                            <li>Legal authorities when required by law</li>
+                        </ul>
+                        <p>We do not sell your personal information to third parties.</p>
+
+                        <h2>5. Data Security</h2>
+                        <p>We implement appropriate technical and organisational security measures to protect your personal information. However, no method of transmission over the Internet is 100% secure.</p>
+
+                        <h2>6. Your Rights</h2>
+                        <p>You have the right to:</p>
+                        <ul>
+                            <li>Access and receive a copy of your personal information</li>
+                            <li>Rectify inaccurate information</li>
+                            <li>Request deletion of your information</li>
+                            <li>Withdraw consent at any time</li>
+                            <li>Opt‑out of marketing communications</li>
+                        </ul>
+
+                        <h2>7. Cookies</h2>
+                        <p>We use cookies and similar tracking technologies to track activity on our platform. You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent. See our <a onclick="navigateTo('cookies')">Cookie Policy</a> for more details.</p>
+
+                        <h2>8. Changes to This Policy</h2>
+                        <p>We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new policy on this page and updating the “Last updated” date.</p>
+
+                        <h2>9. Contact Us</h2>
+                        <p>If you have questions about this Privacy Policy, please contact us at <strong>privacy@admissionhelper.bd</strong>.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Terms of Service Page -->
+            <div class="page" id="termsPage">
+                <div class="content-page">
+                    <div class="content-header">
+                        <h1>Terms of Service</h1>
+                        <p>Last updated: March 1, 2025</p>
+                    </div>
+                    <div class="content-section">
+                        <h2>1. Acceptance of Terms</h2>
+                        <p>By accessing or using the University Admission Helper platform, you agree to be bound by these Terms of Service. If you disagree with any part, you may not access the platform.</p>
+
+                        <h2>2. Eligibility</h2>
+                        <p>You must be at least 13 years old to use this platform. By using the platform, you represent that you have the right, authority, and capacity to enter into these Terms.</p>
+
+                        <h2>3. Account Registration</h2>
+                        <p>When you create an account, you must provide accurate, complete, and current information. You are responsible for safeguarding your password and for all activities that occur under your account.</p>
+
+                        <h2>4. User Conduct</h2>
+                        <p>You agree not to use the platform to:</p>
+                        <ul>
+                            <li>Violate any applicable laws or regulations</li>
+                            <li>Impersonate any person or entity</li>
+                            <li>Submit false or misleading information</li>
+                            <li>Interfere with the proper functioning of the platform</li>
+                            <li>Attempt to gain unauthorised access to other accounts</li>
+                            <li>Harass, abuse, or harm another person</li>
+                            <li>Upload viruses or malicious code</li>
+                        </ul>
+
+                        <h2>5. Applications</h2>
+                        <p>When you submit applications through our platform:</p>
+                        <ul>
+                            <li>You confirm that all information provided is accurate</li>
+                            <li>You understand that application fees are generally non‑refundable</li>
+                            <li>You authorise us to share your information with the universities</li>
+                            <li>You acknowledge that admission decisions are made by universities and we are not responsible for their outcomes</li>
+                        </ul>
+
+                        <h2>6. Intellectual Property</h2>
+                        <p>The platform and its original content, features, and functionality are owned by University Admission Helper and are protected by international copyright, trademark, and other intellectual property laws.</p>
+
+                        <h2>7. Termination</h2>
+                        <p>We may terminate or suspend your account immediately, without prior notice, for any reason, including if you breach these Terms.</p>
+
+                        <h2>8. Limitation of Liability</h2>
+                        <p>In no event shall University Admission Helper be liable for any indirect, incidental, special, consequential, or punitive damages, including loss of profits, data, use, goodwill, or other intangible losses.</p>
+
+                        <h2>9. Disclaimer</h2>
+                        <p>Your use of the platform is at your sole risk. The platform is provided on an “AS IS” and “AS AVAILABLE” basis. We make no warranties that the platform will be uninterrupted, timely, secure, or error‑free.</p>
+
+                        <h2>10. Governing Law</h2>
+                        <p>These Terms shall be governed and construed in accordance with the laws of Bangladesh, without regard to its conflict of law provisions.</p>
+
+                        <h2>11. Changes to Terms</h2>
+                        <p>We reserve the right to modify or replace these Terms at any time. It is your responsibility to check the Terms periodically for changes.</p>
+
+                        <h2>12. Contact Us</h2>
+                        <p>If you have any questions about these Terms, please contact us at <strong>terms@admissionhelper.bd</strong>.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cookie Policy Page -->
+            <div class="page" id="cookiesPage">
+                <div class="content-page">
+                    <div class="content-header">
+                        <h1>Cookie Policy</h1>
+                        <p>Last updated: March 1, 2025</p>
+                    </div>
+                    <div class="content-section">
+                        <h2>What Are Cookies</h2>
+                        <p>Cookies are small text files that are placed on your computer or mobile device when you visit a website. They are widely used to make websites work more efficiently and provide information to the website owners.</p>
+
+                        <h2>How We Use Cookies</h2>
+                        <p>We use cookies for the following purposes:</p>
+                        <ul>
+                            <li><strong>Essential Cookies:</strong> Necessary for the website to function properly. They enable you to navigate the site and use its features, such as accessing secure areas.</li>
+                            <li><strong>Preference Cookies:</strong> Allow the website to remember choices you make (e.g., your username, language, or theme) and provide enhanced, personalised features.</li>
+                            <li><strong>Analytics Cookies:</strong> Help us understand how visitors interact with our website by collecting and reporting information anonymously.</li>
+                            <li><strong>Authentication Cookies:</strong> Remember your login session so you don't have to log in every time you visit.</li>
+                        </ul>
+
+                        <h2>Types of Cookies We Use</h2>
+                        <table style="width:100%; border-collapse: collapse; margin: 1rem 0;">
+                            <tr style="background: var(--border);">
+                                <th style="padding: 0.75rem; text-align: left;">Cookie Name</th>
+                                <th style="padding: 0.75rem; text-align: left;">Purpose</th>
+                                <th style="padding: 0.75rem; text-align: left;">Duration</th>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.75rem; border-bottom: 1px solid var(--border);">session_id</td>
+                                <td style="padding: 0.75rem; border-bottom: 1px solid var(--border);">Maintains your login session</td>
+                                <td style="padding: 0.75rem; border-bottom: 1px solid var(--border);">Session</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.75rem; border-bottom: 1px solid var(--border);">dark_mode</td>
+                                <td style="padding: 0.75rem; border-bottom: 1px solid var(--border);">Remembers your theme preference</td>
+                                <td style="padding: 0.75rem; border-bottom: 1px solid var(--border);">1 year</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.75rem; border-bottom: 1px solid var(--border);">cookie_consent</td>
+                                <td style="padding: 0.75rem; border-bottom: 1px solid var(--border);">Records your cookie consent choice</td>
+                                <td style="padding: 0.75rem; border-bottom: 1px solid var(--border);">1 year</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.75rem;">_ga</td>
+                                <td style="padding: 0.75rem;">Google Analytics – distinguishes users</td>
+                                <td style="padding: 0.75rem;">2 years</td>
+                            </tr>
+                        </table>
+
+                        <h2>Managing Cookies</h2>
+                        <p>Most web browsers allow you to control cookies through their settings. However, if you limit the ability of websites to set cookies, you may worsen your overall user experience and lose some functionality.</p>
+                        <p>To learn how to manage cookies in popular browsers:</p>
+                        <ul>
+                            <li><a href="https://support.google.com/chrome/answer/95647" target="_blank" style="color: var(--primary);">Google Chrome</a></li>
+                            <li><a href="https://support.mozilla.org/en-US/kb/enable-and-disable-cookies-website-preferences" target="_blank" style="color: var(--primary);">Mozilla Firefox</a></li>
+                            <li><a href="https://support.apple.com/en-ie/guide/safari/sfri11471/mac" target="_blank" style="color: var(--primary);">Safari</a></li>
+                            <li><a href="https://support.microsoft.com/en-us/microsoft-edge/delete-cookies-in-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09" target="_blank" style="color: var(--primary);">Microsoft Edge</a></li>
+                        </ul>
+
+                        <h2>Third‑Party Cookies</h2>
+                        <p>In addition to our own cookies, we may also use various third‑party cookies to report usage statistics and deliver advertisements (if applicable).</p>
+
+                        <h2>Updates to This Policy</h2>
+                        <p>We may update our Cookie Policy from time to time. We will notify you of any changes by posting the new policy on this page.</p>
+
+                        <h2>Contact Us</h2>
+                        <p>If you have any questions about our use of cookies, please contact us at <strong>cookies@admissionhelper.bd</strong>.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Student Dashboard -->
+            <div class="page" id="dashboardPage">
+                <div class="dashboard-header">
+                    <h1 class="dashboard-title">Student Dashboard</h1>
+                    <button class="btn btn-primary" onclick="checkEligibility()">
+                        <i class="fas fa-sync-alt"></i> Check Eligibility
+                    </button>
+                </div>
+
+                <div class="dashboard-cards">
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-title"><i class="fas fa-university"></i> Eligible Programs</div>
+                        <div class="dashboard-card-value" id="eligibleCount">0</div>
+                    </div>
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-title"><i class="fas fa-bookmark"></i> Bookmarked</div>
+                        <div class="dashboard-card-value" id="bookmarkCount">0</div>
+                    </div>
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-title"><i class="fas fa-file-alt"></i> Applications</div>
+                        <div class="dashboard-card-value" id="applicationCount">0</div>
+                    </div>
+                </div>
+
+                <div class="applications-section" id="eligibilitySection" style="display: none;">
+                    <h3>Your Eligibility Results</h3>
+                    <div class="progress-bar"><div class="progress-fill" id="eligibilityProgress"></div></div>
+                    <p id="eligibilityText"></p>
+                    <div class="university-grid" id="eligiblePrograms"></div>
+                </div>
+
+                <div class="applications-section">
+                    <h3>My Applications</h3>
+                    <div class="table-responsive">
+                        <table class="applications-table">
+                            <thead><tr><th>#</th><th>University</th><th>Program</th><th>Date</th><th>Status</th></tr></thead>
+                            <tbody id="myApplicationsTable"><tr><td colspan="5" class="text-center">No applications yet</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bookmarks-section">
+                    <h3>My Bookmarks</h3>
+                    <div class="bookmarks-grid" id="myBookmarksGrid">
+                        <p class="text-center">No bookmarks yet</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Dashboard -->
+            <div class="page" id="adminDashboardPage">
+                <div class="dashboard-header">
+                    <h1 class="dashboard-title">Admin Dashboard</h1>
+                    <div class="admin-badge">ADMIN</div>
+                </div>
+
+                <div class="dashboard-cards">
+                    <div class="dashboard-card"><div class="dashboard-card-title"><i class="fas fa-users"></i> Students</div><div class="dashboard-card-value" id="totalStudents">0</div></div>
+                    <div class="dashboard-card"><div class="dashboard-card-title"><i class="fas fa-file-alt"></i> Applications</div><div class="dashboard-card-value" id="totalApplications">0</div></div>
+                    <div class="dashboard-card"><div class="dashboard-card-title"><i class="fas fa-clock"></i> Pending</div><div class="dashboard-card-value" id="pendingApplications">0</div></div>
+                </div>
+
+                <div class="admin-controls" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" onclick="filterAdminApps('all')">All</button>
+                        <button class="filter-btn" onclick="filterAdminApps('pending')">Pending</button>
+                        <button class="filter-btn" onclick="filterAdminApps('approved')">Approved</button>
+                        <button class="filter-btn" onclick="filterAdminApps('rejected')">Rejected</button>
+                    </div>
+                    <button class="btn btn-secondary" onclick="loadAdminData()"><i class="fas fa-sync-alt"></i> Refresh</button>
+                </div>
+
+                <div class="applications-section">
+                    <h3>All Applications</h3>
+                    <div class="table-responsive">
+                        <table class="applications-table">
+                            <thead><tr><th>ID</th><th>Student</th><th>University</th><th>Program</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+                            <tbody id="adminApplicationsTable"><tr><td colspan="7" class="text-center">No applications</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Profile Modal -->
+    <div class="modal" id="profileModal">
+        <div class="modal-content">
+            <div class="modal-header"><h2 class="modal-title">My Profile</h2><button class="modal-close" onclick="closeModal('profileModal')">&times;</button></div>
+            <div id="profileContent">
+                <form onsubmit="event.preventDefault(); updateProfile()">
+                    <div class="form-group"><label>Name</label><input type="text" id="profileNameInput" class="form-input"></div>
+                    <div class="form-group"><label>Email</label><input type="email" id="profileEmailInput" class="form-input" readonly disabled></div>
+                    <div class="form-group"><label>Phone</label><input type="tel" id="profilePhoneInput" class="form-input"></div>
+                    <div class="form-row">
+                        <div class="form-group"><label>SSC GPA</label><input type="number" id="profileSSC" class="form-input" step="0.01" min="0" max="5"></div>
+                        <div class="form-group"><label>HSC GPA</label><input type="number" id="profileHSC" class="form-input" step="0.01" min="0" max="5"></div>
+                    </div>
+                    <div class="form-group"><label>Academic Group</label>
+                        <select id="profileGroup" class="form-input">
+                            <option value="science">Science</option><option value="commerce">Commerce</option><option value="arts">Arts</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Update Profile</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header"><h2 class="modal-title">Settings</h2><button class="modal-close" onclick="closeModal('settingsModal')">&times;</button></div>
+            <div id="settingsContent">
+                <h3>Change Password</h3>
+                <form onsubmit="event.preventDefault(); changePassword()">
+                    <div class="form-group">
+                        <label>Current Password</label>
+                        <div style="position:relative"><input type="password" id="currentPassword" class="form-input"><i class="fas fa-eye" style="position:absolute;right:15px;top:50%;transform:translateY(-50%);cursor:pointer;" onclick="togglePassword('currentPassword',this)"></i></div>
+                    </div>
+                    <div class="form-group">
+                        <label>New Password</label>
+                        <div style="position:relative"><input type="password" id="newPassword" class="form-input"><i class="fas fa-eye" style="position:absolute;right:15px;top:50%;transform:translateY(-50%);cursor:pointer;" onclick="togglePassword('newPassword',this)"></i></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm New Password</label>
+                        <div style="position:relative"><input type="password" id="confirmNewPassword" class="form-input"><i class="fas fa-eye" style="position:absolute;right:15px;top:50%;transform:translateY(-50%);cursor:pointer;" onclick="togglePassword('confirmNewPassword',this)"></i></div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Change Password</button>
+                </form>
+                <hr style="margin:2rem 0; border-color:var(--border);">
+                <h3>Theme Preference</h3>
+                <button class="btn btn-outline btn-block" onclick="toggleTheme()" id="themeToggleBtn"><i class="fas fa-moon"></i> Switch to Light Mode</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifications Container -->
+    <div class="notification-container" id="notificationContainer"></div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div><div class="footer-logo" onclick="navigateTo('home')"><i class="fas fa-graduation-cap"></i><span>AdmissionHelper</span></div><p class="footer-desc">Making university admissions easier for Bangladeshi students since 2024.</p><div class="social-links">...</div></div>
+                <div><h4 class="footer-title">Quick Links</h4><ul class="footer-links"><li><a onclick="navigateTo('home')">Home</a></li><li><a onclick="navigateTo('universities')">Universities</a></li><li><a onclick="navigateTo('scholarships')">Scholarships</a></li><li><a onclick="navigateTo('about')">About</a></li></ul></div>
+                <div><h4 class="footer-title">Resources</h4><ul class="footer-links"><li><a onclick="navigateTo('faq')">FAQ</a></li><li><a onclick="navigateTo('blog')">Blog</a></li><li><a onclick="navigateTo('support')">Support</a></li><li><a onclick="navigateTo('contact')">Contact</a></li></ul></div>
+                <div><h4 class="footer-title">Legal</h4><ul class="footer-links"><li><a onclick="navigateTo('privacy')">Privacy</a></li><li><a onclick="navigateTo('terms')">Terms</a></li><li><a onclick="navigateTo('cookies')">Cookies</a></li></ul></div>
+            </div>
+            <div class="footer-bottom"><p>&copy; <span id="currentYear"></span> University Admission Helper. All rights reserved.</p></div>
+        </div>
+    </footer>
+
+    <script>
+        // ========== GLOBAL VARIABLES ==========
+        let currentUser = null;
+        let universities = [];
+        let scholarships = [];
+        let applications = [];
+        let bookmarks = [];
+
+        // ========== INIT ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-mode');
+                document.getElementById('darkModeToggle').innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+            } else {
+                document.getElementById('darkModeToggle').innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
+            }
+            
+            if (!localStorage.getItem('cookieConsent')) {
+                document.getElementById('cookieConsent').classList.add('show');
+            }
+            
+            checkSession();
+            loadUniversities();
+            loadScholarships();
+            
+            setTimeout(() => {
+                document.getElementById('loadingScreen')?.classList.add('fade-out');
+            }, 500);
+        });
+
+        // ========== AUTH ==========
+        async function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            if (!email || !password) return showNotification('Please fill in all fields', 'error');
+            
+            try {
+                const res = await fetch('../api/login.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    currentUser = data.user;
+                    showNotification('Login successful!', 'success');
+                    updateUserProfile();
+                    if (currentUser.user_type === 'admin') {
+                        navigateTo('adminDashboard');
+                        loadAdminData();
+                    } else {
+                        navigateTo('dashboard');
+                        loadDashboardData();
+                    }
+                } else {
+                    showNotification(data.error, 'error');
+                }
+            } catch (e) {
+                console.error('Login error:', e);
+                showNotification('Network error: ' + e.message, 'error');
+            }
+        }
+
+        async function register() {
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const phone = document.getElementById('signupPhone').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirm = document.getElementById('confirmPassword').value;
+            const sscGPA = document.getElementById('sscGPA').value;
+            const hscGPA = document.getElementById('hscGPA').value;
+            const group = document.getElementById('signupGroup').value;
+            
+            if (!name || !email || !password || !confirm || !sscGPA || !hscGPA || !group)
+                return showNotification('Please fill in all fields', 'error');
+            if (password !== confirm)
+                return showNotification('Passwords do not match', 'error');
+            
+            // Email format validation
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) {
+                return showNotification('Please enter a valid email address', 'error');
+            }
+            
+            try {
+                const res = await fetch('../api/register.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, phone, password, sscGPA, hscGPA, group })
+                });
+                
+                const data = await res.json();
+                if (res.ok) {
+                    showNotification('Registration successful! Please login.', 'success');
+                    showLoginForm();
+                } else {
+                    showNotification(data.error, 'error');
+                }
+            } catch (e) {
+                console.error('Registration error:', e);
+                showNotification('Network error: ' + e.message, 'error');
+            }
+        }
+
+        async function adminLogin() {
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('adminPassword').value;
+            if (!email || !password) return showNotification('Enter email and password', 'error');
+            try {
+                const res = await fetch('../api/login.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await res.json();
+                if (res.ok && data.user.user_type === 'admin') {
+                    currentUser = data.user;
+                    showNotification('Admin login successful!', 'success');
+                    updateUserProfile();
+                    navigateTo('adminDashboard');
+                    loadAdminData();
+                } else {
+                    showNotification('Invalid admin credentials', 'error');
+                }
+            } catch (e) {
+                showNotification('Network error', 'error');
+            }
+        }
+
+        async function logout() {
+            await fetch('../api/logout.php', { method: 'POST' });
+            currentUser = null;
+            showNotification('Logged out successfully', 'info');
+            updateUserProfile();
+            navigateTo('home');
+        }
+
+        function requestPasswordReset() {
+            const email = document.getElementById('resetEmail').value;
+            if (!email) return showNotification('Please enter your email', 'error');
+            showNotification('Password reset link sent! (demo)', 'success');
+            setTimeout(() => showLoginForm(), 2000);
+        }
+
+        function checkSession() {
+            const saved = localStorage.getItem('currentUser');
+            if (saved) {
+                try {
+                    currentUser = JSON.parse(saved);
+                    updateUserProfile();
+                } catch (e) {}
+            }
+        }
+
+        function updateUserProfile() {
+            const profileName = document.getElementById('profileName');
+            const dropdownName = document.getElementById('dropdownName');
+            const dropdownEmail = document.getElementById('dropdownEmail');
+            
+            if (currentUser) {
+                profileName.textContent = currentUser.name.split(' ')[0];
+                dropdownName.textContent = currentUser.name;
+                dropdownEmail.textContent = currentUser.email;
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            } else {
+                profileName.textContent = 'Guest';
+                dropdownName.textContent = 'Guest User';
+                dropdownEmail.textContent = 'guest@example.com';
+                localStorage.removeItem('currentUser');
+            }
+        }
+
+        // ========== NAVIGATION ==========
+        function navigateTo(page) {
+            // Protect universities & scholarships pages
+            if ((page === 'universities' || page === 'scholarships') && !currentUser) {
+                showNotification('Please login to view this content', 'warning');
+                showLoginForm();
+                page = 'home';
+            }
+            
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(page + 'Page').classList.add('active');
+            
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            const activeLink = Array.from(document.querySelectorAll('.nav-link')).find(l => 
+                l.textContent.trim().toLowerCase() === page.toLowerCase()
+            );
+            if (activeLink) activeLink.classList.add('active');
+            
+            if (page === 'universities') loadUniversities();
+            if (page === 'scholarships') loadScholarships();
+            if (page === 'dashboard' && currentUser) loadDashboardData();
+            if (page === 'adminDashboard' && currentUser?.user_type === 'admin') loadAdminData();
+        }
+
+        function showLoginForm() { document.getElementById('loginForm').style.display = 'block'; document.getElementById('signupForm').style.display = 'none'; document.getElementById('forgotPasswordForm').style.display = 'none'; document.getElementById('adminLoginForm').style.display = 'none'; }
+        function showSignupForm() { document.getElementById('loginForm').style.display = 'none'; document.getElementById('signupForm').style.display = 'block'; document.getElementById('forgotPasswordForm').style.display = 'none'; document.getElementById('adminLoginForm').style.display = 'none'; }
+        function showForgotPassword() { document.getElementById('loginForm').style.display = 'none'; document.getElementById('signupForm').style.display = 'none'; document.getElementById('forgotPasswordForm').style.display = 'block'; document.getElementById('adminLoginForm').style.display = 'none'; }
+        function showAdminLoginForm() { document.getElementById('loginForm').style.display = 'none'; document.getElementById('signupForm').style.display = 'none'; document.getElementById('forgotPasswordForm').style.display = 'none'; document.getElementById('adminLoginForm').style.display = 'block'; }
+
+        // ========== UNIVERSITIES ==========
+        async function loadUniversities() {
+            try {
+                const res = await fetch('../api/universities.php');
+                universities = await res.json();
+                renderUniversities(universities);
+            } catch (e) { console.error(e); }
+        }
+
+        function renderUniversities(unis) {
+            const grid = document.getElementById('universitiesGrid');
+            if (!grid) return;
+            
+            grid.innerHTML = unis.map(uni => `
+                <div class="university-card">
+                    <div class="university-badge">${uni.type}</div>
+                    <h3 class="university-name">${uni.name}</h3>
+                    <div class="university-details">
+                        <div><i class="fas fa-map-marker-alt"></i> ${uni.city}, ${uni.division}</div>
+                        <div><i class="fas fa-calendar"></i> Est. ${uni.established_year}</div>
+                        <div><i class="fas fa-trophy"></i> Rank #${uni.ranking}</div>
+                        <div><i class="fas fa-book"></i> ${uni.programs}+ Programs</div>
+                    </div>
+                    <p>${uni.description}</p>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn btn-primary flex-grow" onclick="viewUniversity(${uni.id})">View</button>
+                        <button class="btn btn-outline" onclick="toggleBookmark(${uni.id}, this)"><i class="${isBookmarked(uni.id) ? 'fas' : 'far'} fa-bookmark"></i></button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function filterUniversities(type) {
+            document.querySelectorAll('#universitiesPage .filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            const url = type === 'all' ? '../api/universities.php' : `../api/universities.php?type=${type}`;
+            const res = await fetch(url);
+            const data = await res.json();
+            renderUniversities(data);
+        }
+
+        function viewUniversity(id) { showNotification('University details coming soon!', 'info'); }
+
+        // ========== BOOKMARKS ==========
+        async function toggleBookmark(uniId, btn) {
+            if (!currentUser) return showNotification('Please login first', 'warning');
+            const icon = btn.querySelector('i');
+            const res = await fetch('../api/bookmark.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ university_id: uniId })
+            });
+            const data = await res.json();
+            if (data.bookmarked) {
+                icon.classList.remove('far'); icon.classList.add('fas');
+                showNotification('Bookmarked', 'success');
+            } else {
+                icon.classList.remove('fas'); icon.classList.add('far');
+                showNotification('Removed from bookmarks', 'info');
+            }
+            if (currentUser) loadDashboardData();
+        }
+
+        function isBookmarked(uniId) {
+            return bookmarks.some(b => b.university_id == uniId);
+        }
+
+        // ========== SCHOLARSHIPS ==========
+        async function loadScholarships() {
+            try {
+                const res = await fetch('../api/scholarships.php');
+                scholarships = await res.json();
+                renderScholarships(scholarships);
+            } catch (e) { console.error(e); }
+        }
+
+        function renderScholarships(schs) {
+            const grid = document.getElementById('scholarshipsGrid');
+            if (!grid) return;
+            grid.innerHTML = schs.map(s => `
+                <div class="scholarship-card">
+                    <div class="scholarship-badge">${s.university_name}</div>
+                    <h3>${s.name}</h3>
+                    <div class="scholarship-amount">৳${parseInt(s.amount).toLocaleString()}</div>
+                    <p>${s.description}</p>
+                    <div class="scholarship-deadline"><i class="fas fa-clock"></i> Deadline: ${new Date(s.deadline).toLocaleDateString()}</div>
+                    <button class="btn btn-outline btn-block mt-4" onclick="applyForScholarship(${s.id})">Apply Now</button>
+                </div>
+            `).join('');
+        }
+
+        function applyForScholarship(id) {
+            if (!currentUser) { showNotification('Please login first', 'warning'); showLoginForm(); return; }
+            showNotification('Scholarship application submitted! (demo)', 'success');
+        }
+
+        // ========== DASHBOARD ==========
+        async function loadDashboardData() {
+            if (!currentUser) return;
+            try {
+                const res = await fetch('../api/dashboard.php');
+                const data = await res.json();
+                document.getElementById('eligibleCount').textContent = data.eligible;
+                document.getElementById('bookmarkCount').textContent = data.bookmarks;
+                document.getElementById('applicationCount').textContent = data.applications;
+                
+                loadApplications();
+                loadBookmarksList();
+            } catch (e) { console.error(e); }
+        }
+
+        async function loadApplications() {
+            const res = await fetch('../api/applications.php');
+            const apps = await res.json();
+            const tbody = document.getElementById('myApplicationsTable');
+            if (apps.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center">No applications yet</td></tr>';
+            } else {
+                tbody.innerHTML = apps.map(app => `
+                    <tr>
+                        <td>#${app.id}</td>
+                        <td>${app.university_name}</td>
+                        <td>${app.program_name || 'N/A'}</td>
+                        <td>${new Date(app.application_date).toLocaleDateString()}</td>
+                        <td><span class="status-badge ${app.status}">${app.status}</span></td>
+                    </tr>
+                `).join('');
+            }
+        }
+
+        async function loadBookmarksList() {
+            const res = await fetch('../api/bookmarks.php');
+            const marks = await res.json();
+            bookmarks = marks;
+            const grid = document.getElementById('myBookmarksGrid');
+            if (marks.length === 0) {
+                grid.innerHTML = '<p class="text-center">No bookmarks yet</p>';
+            } else {
+                grid.innerHTML = marks.map(b => `
+                    <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:8px; padding:1rem; margin-bottom:1rem;">
+                        <h4>${b.university_name}</h4>
+                        <button class="btn btn-sm btn-outline" onclick="toggleBookmark(${b.university_id}, this)"><i class="fas fa-bookmark"></i> Remove</button>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function checkEligibility() {
+            if (!currentUser) return showNotification('Please login first', 'warning');
+            
+            // Filter universities based on user's GPA and group
+            const eligible = universities.filter(uni => {
+                const meetsSSC = uni.min_ssc_gpa <= currentUser.ssc_gpa;
+                const meetsHSC = uni.min_hsc_gpa <= currentUser.hsc_gpa;
+                // If required_group is set, it must match; otherwise assume eligible for all groups
+                const groupMatch = !uni.required_group || uni.required_group === currentUser.academic_group;
+                return meetsSSC && meetsHSC && groupMatch;
+            });
+            
+            // Update the progress bar and text (dummy progress for now)
+            const percentage = Math.min(100, Math.round((eligible.length / universities.length) * 100));
+            document.getElementById('eligibilityProgress').style.width = percentage + '%';
+            document.getElementById('eligibilityText').textContent = `You are eligible for ${eligible.length} out of ${universities.length} programs based on your GPA and group.`;
+            
+            // Render eligible universities
+            const eligibleGrid = document.getElementById('eligiblePrograms');
+            if (eligible.length === 0) {
+                eligibleGrid.innerHTML = '<p class="text-center">No eligible programs found based on your GPA and group.</p>';
+            } else {
+                eligibleGrid.innerHTML = eligible.map(uni => `
+                    <div class="university-card">
+                        <div class="university-badge">${uni.type}</div>
+                        <h3 class="university-name">${uni.name}</h3>
+                        <div class="university-details">
+                            <div><i class="fas fa-map-marker-alt"></i> ${uni.city}, ${uni.division}</div>
+                            <div><i class="fas fa-calendar"></i> Est. ${uni.established_year}</div>
+                            <div><i class="fas fa-trophy"></i> Rank #${uni.ranking}</div>
+                            <div><i class="fas fa-book"></i> ${uni.programs}+ Programs</div>
+                        </div>
+                        <p>${uni.description}</p>
+                        <button class="btn btn-outline btn-block" onclick="applyToUniversity(${uni.id})">Apply Now</button>
+                    </div>
+                `).join('');
+            }
+            
+            document.getElementById('eligibilitySection').style.display = 'block';
+            showNotification(`Found ${eligible.length} eligible universities!`, 'success');
+        }
+
+        // ========== APPLY TO UNIVERSITY (ADDED) ==========
+        async function applyToUniversity(uniId) {
+            if (!currentUser) {
+                showNotification('Please login first', 'warning');
+                showLoginForm();
+                return;
+            }
+            const program = prompt('Enter program name (optional):');
+            if (program === null) return; // cancelled
+            try {
+                const res = await fetch('../api/apply.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ university_id: uniId, program: program || '' })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    showNotification('Application submitted successfully!', 'success');
+                    loadDashboardData(); // refresh counts
+                } else {
+                    showNotification(data.error, 'error');
+                }
+            } catch (e) {
+                showNotification('Network error', 'error');
+            }
+        }
+
+        // ========== ADMIN ==========
+        async function loadAdminData() {
+            try {
+                const res = await fetch('../api/admin/stats.php');
+                const stats = await res.json();
+                document.getElementById('totalStudents').textContent = stats.students;
+                document.getElementById('totalApplications').textContent = stats.applications;
+                document.getElementById('pendingApplications').textContent = stats.pending;
+                loadAdminApplications();
+            } catch (e) { console.error(e); }
+        }
+
+        async function loadAdminApplications(status = 'all') {
+            const url = status === 'all' ? '../api/admin/applications.php' : `../api/admin/applications.php?status=${status}`;
+            const res = await fetch(url);
+            const apps = await res.json();
+            const tbody = document.getElementById('adminApplicationsTable');
+            if (apps.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center">No applications</td></tr>';
+            } else {
+                tbody.innerHTML = apps.map(app => `
+                    <tr>
+                        <td>${app.id}</td>
+                        <td>${app.user_name}<br><small>${app.email}</small></td>
+                        <td>${app.university_name}</td>
+                        <td>${app.program_name || '-'}</td>
+                        <td>${new Date(app.application_date).toLocaleDateString()}</td>
+                        <td><span class="status-badge ${app.status}">${app.status}</span></td>
+                        <td>
+                            <select onchange="updateApplicationStatus(${app.id}, this.value)" class="form-input" style="padding:0.3rem;">
+                                <option value="pending" ${app.status==='pending'?'selected':''}>Pending</option>
+                                <option value="approved" ${app.status==='approved'?'selected':''}>Approve</option>
+                                <option value="rejected" ${app.status==='rejected'?'selected':''}>Reject</option>
+                            </select>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+        }
+
+        async function updateApplicationStatus(appId, status) {
+            const res = await fetch('../api/admin/update-status.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ application_id: appId, status })
+            });
+            if (res.ok) {
+                showNotification('Status updated', 'success');
+                loadAdminApplications(document.querySelector('#adminDashboardPage .filter-btn.active')?.textContent.toLowerCase() || 'all');
+            } else {
+                showNotification('Update failed', 'error');
+            }
+        }
+
+        function filterAdminApps(status) {
+            document.querySelectorAll('#adminDashboardPage .filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            loadAdminApplications(status);
+        }
+
+        // ========== PROFILE ==========
+        async function showProfileModal() {
+            if (!currentUser) return showNotification('Please login first', 'warning');
+            await loadProfile();
+            document.getElementById('profileModal').classList.add('show');
+        }
+
+        async function loadProfile() {
+            const res = await fetch('../api/profile.php');
+            const user = await res.json();
+            document.getElementById('profileNameInput').value = user.name;
+            document.getElementById('profileEmailInput').value = user.email;
+            document.getElementById('profilePhoneInput').value = user.phone || '';
+            document.getElementById('profileSSC').value = user.ssc_gpa;
+            document.getElementById('profileHSC').value = user.hsc_gpa;
+            document.getElementById('profileGroup').value = user.academic_group;
+        }
+
+        async function updateProfile() {
+            const data = {
+                name: document.getElementById('profileNameInput').value,
+                phone: document.getElementById('profilePhoneInput').value,
+                ssc_gpa: document.getElementById('profileSSC').value,
+                hsc_gpa: document.getElementById('profileHSC').value,
+                academic_group: document.getElementById('profileGroup').value
+            };
+            const res = await fetch('../api/profile.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            if (res.ok) {
+                showNotification('Profile updated', 'success');
+                closeModal('profileModal');
+                currentUser = { ...currentUser, ...data };
+                updateUserProfile();
+            } else {
+                showNotification('Update failed', 'error');
+            }
+        }
+
+        // ========== SETTINGS ==========
+        function showSettingsModal() {
+            if (!currentUser) return showNotification('Please login first', 'warning');
+            document.getElementById('settingsModal').classList.add('show');
+        }
+
+        async function changePassword() {
+            const current = document.getElementById('currentPassword').value;
+            const newPass = document.getElementById('newPassword').value;
+            const confirm = document.getElementById('confirmNewPassword').value;
+            if (!current || !newPass || !confirm) return showNotification('Fill all fields', 'error');
+            if (newPass !== confirm) return showNotification('New passwords do not match', 'error');
+            const res = await fetch('../api/settings.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ current_password: current, new_password: newPass })
+            });
+            if (res.ok) {
+                showNotification('Password changed', 'success');
+                closeModal('settingsModal');
+                document.getElementById('currentPassword').value = '';
+                document.getElementById('newPassword').value = '';
+                document.getElementById('confirmNewPassword').value = '';
+            } else {
+                const data = await res.json();
+                showNotification(data.error, 'error');
+            }
+        }
+
+        // ========== THEME ==========
+        function toggleTheme() {
+            const body = document.body;
+            const darkToggle = document.getElementById('darkModeToggle');
+            if (body.classList.contains('light-mode')) {
+                body.classList.remove('light-mode');
+                localStorage.setItem('theme', 'dark');
+                darkToggle.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
+            } else {
+                body.classList.add('light-mode');
+                localStorage.setItem('theme', 'light');
+                darkToggle.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+            }
+        }
+
+        // ========== UTILITIES ==========
+        function togglePassword(fieldId, icon) {
+            const field = document.getElementById(fieldId);
+            if (field.type === 'password') {
+                field.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                field.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        function showNotification(message, type = 'info') {
+            const container = document.getElementById('notificationContainer');
+            const notif = document.createElement('div');
+            notif.className = `notification ${type}`;
+            notif.textContent = message;
+            container.appendChild(notif);
+            setTimeout(() => notif.remove(), 3000);
+        }
+
+        function acceptCookies() {
+            localStorage.setItem('cookieConsent', 'accepted');
+            document.getElementById('cookieConsent').classList.remove('show');
+        }
+
+        function declineCookies() {
+            localStorage.setItem('cookieConsent', 'declined');
+            document.getElementById('cookieConsent').classList.remove('show');
+        }
+
+        function sendContactMessage() {
+            const name = document.getElementById('contactName')?.value;
+            const email = document.getElementById('contactEmail')?.value;
+            const subject = document.getElementById('contactSubject')?.value;
+            const message = document.getElementById('contactMessage')?.value;
+            if (!name || !email || !subject || !message) return showNotification('Please fill all fields', 'error');
+            showNotification('Message sent! We\'ll reply within 24 hours.', 'success');
+            document.getElementById('contactName').value = '';
+            document.getElementById('contactEmail').value = '';
+            document.getElementById('contactSubject').value = '';
+            document.getElementById('contactMessage').value = '';
+        }
+
+        function viewBlogPost(id) { showNotification('Blog post coming soon!', 'info'); }
+
+        function toggleFaq(element) {
+            const answer = element.nextElementSibling;
+            const icon = element.querySelector('i');
+            answer.classList.toggle('show');
+            icon.classList.toggle('fa-chevron-down');
+            icon.classList.toggle('fa-chevron-up');
+        }
+
+        // Profile dropdown toggle
+        document.getElementById('profileBtn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            document.getElementById('profileDropdown').classList.toggle('show');
+        });
+        window.addEventListener('click', function() {
+            document.getElementById('profileDropdown').classList.remove('show');
+        });
+        document.getElementById('profileDropdown').addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+        document.getElementById('mobileToggle').addEventListener('click', function() {
+            alert('Mobile menu - implement as needed');
+        });
+    </script>
+</body>
+</html>
